@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      - WEBSOCKET_ENABLED=true
+      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
+      - SIGNUPS_ALLOWED=false
+      - WEB_VAULT_ENABLED=false
+    ports:
+      - 8080:80
+      - 3012:3012
+    volumes:
+      - vaultwarden_data:/data
+    networks:
+      - vaultwarden_network
+
+volumes:
+  vaultwarden_data:
+    driver: local
+
+networks:
+  vaultwarden_network:
+    driver: bridge
+    ipam:
+      driver: default
+

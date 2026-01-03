@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  caddy:
+    image: caddy:latest
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+    restart: always
+  check-auth:
+    image: python:3.9-slim
+    command: sh -c "pip install requests && python /check.py"
+    volumes:
+      - ./check.py:/check.py
+  frps:
+    image: snowdreamtech/frps:latest
+    ports:
+      - "7000:7000" # Tunnel Connection
+      - "7500:7500" # Tunnel Connection
+    volumes:
+      - ./frps.toml:/etc/frp/frps.toml
+    restart: always
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=3600
+      - WATCHTOWER_INCLUDE_STOPPED=false
+      - WATCHTOWER_REVIVE_STOPPED=false
+volumes:
+  caddy_data:
+    driver: local
