@@ -8,9 +8,12 @@ frps.{$DOMAIN} {
     reverse_proxy frps:7500
 }
 
-:443, *.{$DOMAIN} {
+*.{$DOMAIN} {
+    @exclude_frps host {
+        not frps.{$DOMAIN}
+    }
     tls {
         on_demand
     }
-    reverse_proxy frps:8080
+    reverse_proxy @exclude_frps frps:8080
 }
