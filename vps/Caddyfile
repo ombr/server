@@ -5,7 +5,6 @@
 }
 
 frps.{$DOMAIN} {
-    tls
     reverse_proxy frps:7500
 }
 
