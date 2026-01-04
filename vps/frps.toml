@@ -3,7 +3,17 @@ vhostHTTPPort = 8080
 auth.method = "token"
 auth.token = "SUPER_SECRET_TOKEN"
 
+subdomainHost = "yourdomain.com"
+
 webServer.addr = "0.0.0.0"
 webServer.port = 7500
 webServer.user = "admin"
 webServer.password = "admin"
+
+
+[[proxies]]
+name = "frps"
+type = "http"
+localIP = "127.0.0.1"
+localPort = 7500
+subdomain = "frps"
