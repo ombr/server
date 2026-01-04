@@ -18,7 +18,8 @@ services:
     image: snowdreamtech/frps:latest
     ports:
       - "7000:7000" # Tunnel Connection
-      - "7500:7500" # Tunnel Connection
+      - "7500:7500" # Admin Panel
+      - "8000-9999:8000-9999"
     volumes:
       - ./frps.toml.template:/etc/frp/frps.toml.template
       - ./frps-entrypoint.sh:/frps-entrypoint.sh

@@ -1,30 +1,31 @@
 version: '3.8'
 
 services:
+  frpc:
+    image: snowdreamtech/frpc:latest
+    volumes:
+      - ./frpc.toml:/etc/frp/frpc.toml
+
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     restart: unless-stopped
-    environment:
-      - WEBSOCKET_ENABLED=true
-      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
-      - SIGNUPS_ALLOWED=false
-      - WEB_VAULT_ENABLED=false
+    env_file:
+      - secrets/vaultwarden/.env
     ports:
-      - 8080:80
-      - 3012:3012
+      - "${VAULTWARDEN_PORT_HTTP:-8080}:80"
+      - "${VAULTWARDEN_PORT_WEBSOCKET:-3012}:3012"
     volumes:
       - vaultwarden_data:/data
-    networks:
-      - vaultwarden_network
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
 volumes:
+  caddy_data:
   vaultwarden_data:
-    driver: local
-
-networks:
-  vaultwarden_network:
-    driver: bridge
-    ipam:
-      driver: default
 
