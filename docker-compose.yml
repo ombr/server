@@ -5,7 +5,6 @@ services:
     image: snowdreamtech/frpc:latest
     volumes:
       - ./frpc.toml:/etc/frp/frpc.toml
-
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden

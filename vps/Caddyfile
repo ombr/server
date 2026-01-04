@@ -12,8 +12,5 @@ frps.{$DOMAIN} {
     @exclude_frps host {
         not frps.{$DOMAIN}
     }
-    tls {
-        on_demand
-    }
     reverse_proxy @exclude_frps frps:8080
 }
