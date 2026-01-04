@@ -4,7 +4,12 @@
     }
 }
 
-:443, *.yourdomain.com {
+frps.{$DOMAIN} {
+    tls
+    reverse_proxy frps:7500
+}
+
+:443, *.{$DOMAIN} {
     tls {
         on_demand
     }

@@ -6,6 +6,8 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
+    environment:
+      - DOMAIN=${DOMAIN:-yourdomain.com}
     restart: always
   check-auth:
     image: python:3.9-slim
@@ -18,7 +20,11 @@ services:
       - "7000:7000" # Tunnel Connection
       - "7500:7500" # Tunnel Connection
     volumes:
-      - ./frps.toml:/etc/frp/frps.toml
+      - ./frps.toml.template:/etc/frp/frps.toml.template
+      - ./frps-entrypoint.sh:/frps-entrypoint.sh
+    entrypoint: ["/bin/sh", "/frps-entrypoint.sh"]
+    environment:
+      - DOMAIN=${DOMAIN:-yourdomain.com}
     restart: always
   watchtower:
     image: containrrr/watchtower:latest
