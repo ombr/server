@@ -1,16 +1,3 @@
-{
-    on_demand_tls {
-        ask http://check-auth:8000/check
-    }
-}
-
-frps.{$DOMAIN} {
-    reverse_proxy frps:7500
-}
-
 *.{$DOMAIN} {
-    @exclude_frps host {
-        not frps.{$DOMAIN}
-    }
-    reverse_proxy @exclude_frps frps:8080
+    reverse_proxy frps:8080
 }
